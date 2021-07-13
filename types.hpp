@@ -1,3 +1,6 @@
+#ifndef _TYPES_HPP
+#define _TYPES_HPP
+
 #pragma once
 #include <stdbool.h>
 #include <stdint.h>
@@ -39,4 +42,6 @@ static_assert(sizeof(s16) == 2 && sizeof(u16) == 2, "!");
 static_assert(sizeof(s32) == 4 && sizeof(u32) == 4, "!");
 static_assert(sizeof(f32) == 4, "!");
 static_assert(sizeof(f64) == 8, "!");
+#endif
+
 #endif

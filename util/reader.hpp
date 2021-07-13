@@ -1,3 +1,6 @@
+#ifndef _READER_HPP
+#define _READER_HPP
+
 #include <type_traits>
 #include <types.hpp>
 #include <vector>
@@ -106,3 +109,5 @@ private:
 };
 
 }
+
+#endif
