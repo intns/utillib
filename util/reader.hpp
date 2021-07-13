@@ -1,3 +1,4 @@
+#include <type_traits>
 #include <types.hpp>
 #include <vector>
 
@@ -10,12 +11,8 @@ public:
         Big
     };
 
-    Reader(std::vector<u8> bytes = { 0 })
-        : m_buffer(bytes)
-        , m_position(0)
-        , m_endianness(Endianness::Little)
-    {
-    }
+    Reader(Endianness endianness = Endianness::Little);
+    Reader(std::vector<u8> bytes, std::size_t position = 0, Endianness endianness = Endianness::Little);
     ~Reader() = default;
     Reader(const Reader&) = delete;
     Reader& operator=(const Reader&) = delete;
@@ -23,8 +20,8 @@ public:
     inline const std::vector<u8>& getBuffer() const { return m_buffer; }
     inline const std::size_t getRemaining() const { return m_buffer.size() - m_position; }
 
-    inline void setEndianness(Endianness endian) { m_endianness = endian; }
-    inline const Endianness& getEndianness() const { return m_endianness; }
+    inline Endianness& endianness() { return m_endianness; }
+    inline const Endianness& endianness() const { return m_endianness; }
 
     inline void setPosition(std::size_t position)
     {
@@ -33,6 +30,30 @@ public:
         }
     }
     inline const std::size_t& getPosition() const { return m_position; }
+
+    template <typename T>
+    inline constexpr T read()
+    {
+        // UNSIGNED INTEGER TYPES
+        if constexpr (std::is_same<T, u32>::value) {
+            return readU32();
+        } else if constexpr (std::is_same<T, u16>::value) {
+            return readU16();
+        } else if constexpr (std::is_same<T, u8>::value) {
+            return readU8();
+        }
+
+        // SIGNED INTEGER TYPES
+        else if constexpr (std::is_same<T, s32>::value) {
+            return readS32();
+        } else if constexpr (std::is_same<T, s16>::value) {
+            return readS16();
+        } else if constexpr (std::is_same<T, s8>::value) {
+            return readS8();
+        }
+
+        return T();
+    }
 
     inline u8 readU8() { return m_buffer[m_position++]; }
     inline u16 readU16()
