@@ -25,6 +25,6 @@ int main(int argc, char** argv)
     std::ofstream out("out.txt", std::ios_base::binary);
     out.write("test test dump to hex test", 26);
     out.close();
-    DumpFile("out.txt", true);
+    DumpFile("out.txt");
     std::remove("out.txt");
 }
