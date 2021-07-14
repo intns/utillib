@@ -37,7 +37,7 @@ static std::optional<std::vector<std::string>> IsAnagramOfList(std::string anagr
     return std::nullopt;
 }
 
-static bool DumpFile(std::string originalFile)
+static bool DumpFileToCppHeader(std::string originalFile)
 {
     std::ifstream file(originalFile, std::ios_base::binary);
     if (!file.is_open()) {
