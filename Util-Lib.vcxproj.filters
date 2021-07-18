@@ -18,7 +18,10 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="util\reader.cpp">
+    <ClCompile Include="util\fstream_reader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="util\vector_reader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -26,10 +29,13 @@
     <ClInclude Include="types.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="util\reader.hpp">
+    <ClInclude Include="util\misc.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="util\misc.hpp">
+    <ClInclude Include="util\fstream_reader.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="util\vector_reader.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

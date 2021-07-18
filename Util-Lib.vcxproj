@@ -148,12 +148,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="util\reader.cpp" />
+    <ClCompile Include="util\fstream_reader.cpp" />
+    <ClCompile Include="util\vector_reader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="types.hpp" />
+    <ClInclude Include="util\fstream_reader.hpp" />
     <ClInclude Include="util\misc.hpp" />
-    <ClInclude Include="util\reader.hpp" />
+    <ClInclude Include="util\vector_reader.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

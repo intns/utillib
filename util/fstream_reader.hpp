@@ -1,38 +1,39 @@
-#ifndef _READER_HPP
-#define _READER_HPP
+#ifndef _FSTREAM_READER_HPP
+#define _FSTREAM_READER_HPP
 
+#include <fstream>
 #include <type_traits>
 #include <types.hpp>
 #include <vector>
 
 namespace util {
 
-class Reader {
+class fstream_reader {
 public:
     enum class Endianness : u8 {
         Little = 0,
         Big
     };
 
-    Reader(Endianness endianness = Endianness::Little);
-    Reader(std::vector<u8> bytes, std::size_t position = 0, Endianness endianness = Endianness::Little);
-    ~Reader() = default;
-    Reader(const Reader&) = delete;
-    Reader& operator=(const Reader&) = delete;
+    fstream_reader(std::ifstream& file, std::size_t position = 0, Endianness endianness = Endianness::Little);
+    ~fstream_reader() = default;
+    fstream_reader(const fstream_reader&) = delete;
+    fstream_reader& operator=(const fstream_reader&) = delete;
 
-    inline const std::vector<u8>& getBuffer() const { return m_buffer; }
-    inline const std::size_t getRemaining() const { return m_buffer.size() - m_position; }
+    inline const std::ifstream& getStream() const { return m_filestream; }
+    inline const std::size_t getRemaining() const { return m_filesize - m_filestream.tellg(); }
+    inline const std::streampos getFilesize() const { return m_filesize; }
 
     inline Endianness& endianness() { return m_endianness; }
     inline const Endianness& endianness() const { return m_endianness; }
 
     inline void setPosition(std::size_t position)
     {
-        if (position <= m_buffer.size()) {
-            m_position = position;
+        if (position <= m_filesize) {
+            m_filestream.seekg(position);
         }
     }
-    inline const std::size_t& getPosition() const { return m_position; }
+    inline const std::size_t getPosition() const { return m_filestream.tellg(); }
 
     template <typename T>
     inline constexpr T read()
@@ -58,7 +59,12 @@ public:
         return T();
     }
 
-    inline u8 readU8() { return m_buffer[m_position++]; }
+    inline u8 readU8()
+    {
+        u8 byte = 0;
+        m_filestream.read(reinterpret_cast<s8*>(&byte), 1);
+        return byte;
+    }
     inline u16 readU16()
     {
         u8 byte0 = readU8();
@@ -80,7 +86,12 @@ public:
             : (byte3 | (byte2 << 8) | (byte1 << 16) | (byte0 << 24));
     }
 
-    inline s8 readS8() { return (s8)m_buffer[m_position++]; }
+    inline s8 readS8()
+    {
+        s8 byte = 0;
+        m_filestream.read(&byte, 1);
+        return byte;
+    }
     inline s16 readS16()
     {
         s8 byte0 = readS8();
@@ -103,8 +114,8 @@ public:
     }
 
 private:
-    std::vector<u8> m_buffer;
-    std::size_t m_position;
+    std::ifstream& m_filestream;
+    std::streampos m_filesize;
     Endianness m_endianness;
 };
 
