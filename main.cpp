@@ -13,7 +13,7 @@ int main(int argc, char** argv)
 
     // CHECKING READING FUNCTIONS
     util::vector_reader vector_reader({ 80, 16, 2, 3, 4, 5, 6 }, 0, util::vector_reader::Endianness::Big);
-    std::cout << vector_reader.read<s16>() << std::endl;
+    std::cout << vector_reader.readS16() << std::endl;
 
     std::ifstream fstream_reader_file("out.txt", std::ios_base::binary);
     util::fstream_reader fstream_reader(fstream_reader_file);

@@ -34,28 +34,11 @@ public:
     }
     inline const std::size_t& getPosition() const { return m_position; }
 
-    template <typename T>
-    inline constexpr T read()
+    inline void read_buffer(s8* buffer, std::size_t size)
     {
-        // UNSIGNED INTEGER TYPES
-        if constexpr (std::is_same<T, u32>::value) {
-            return readU32();
-        } else if constexpr (std::is_same<T, u16>::value) {
-            return readU16();
-        } else if constexpr (std::is_same<T, u8>::value) {
-            return readU8();
+        for (std::size_t i = 0; i < size; i++) {
+            buffer[i] = m_buffer[m_position + i];
         }
-
-        // SIGNED INTEGER TYPES
-        else if constexpr (std::is_same<T, s32>::value) {
-            return readS32();
-        } else if constexpr (std::is_same<T, s16>::value) {
-            return readS16();
-        } else if constexpr (std::is_same<T, s8>::value) {
-            return readS8();
-        }
-
-        return T();
     }
 
     inline u8 readU8() { return m_buffer[m_position++]; }
@@ -79,6 +62,15 @@ public:
             ? (byte0 | (byte1 << 8) | (byte2 << 16) | (byte3 << 24))
             : (byte3 | (byte2 << 8) | (byte1 << 16) | (byte0 << 24));
     }
+    inline u64 readU64()
+    {
+        u32 word0 = readU32();
+        u32 word1 = readU32();
+
+        return (m_endianness == Endianness::Little)
+            ? (((u64)word0) | ((u64)word1 << 32))
+            : (((u64)word1) | ((u64)word0 << 32));
+    }
 
     inline s8 readS8() { return (s8)m_buffer[m_position++]; }
     inline s16 readS16()
@@ -100,6 +92,15 @@ public:
         return (m_endianness == Endianness::Little)
             ? (byte0 | (byte1 << 8) | (byte2 << 16) | (byte3 << 24))
             : (byte3 | (byte2 << 8) | (byte1 << 16) | (byte0 << 24));
+    }
+    inline s64 readS64()
+    {
+        s32 word0 = readS32();
+        s32 word1 = readS32();
+
+        return (m_endianness == Endianness::Little)
+            ? (((s64)word0 << 32) | (word1))
+            : (((s64)word1 << 32) | (word0));
     }
 
 private:

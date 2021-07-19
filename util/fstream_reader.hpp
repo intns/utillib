@@ -21,7 +21,7 @@ public:
     fstream_reader& operator=(const fstream_reader&) = delete;
 
     inline const std::ifstream& getStream() const { return m_filestream; }
-    inline const std::size_t getRemaining() const { return m_filesize - m_filestream.tellg(); }
+    inline const std::streampos getRemaining() const { return m_filesize - m_filestream.tellg(); }
     inline const std::streampos getFilesize() const { return m_filesize; }
 
     inline Endianness& endianness() { return m_endianness; }
@@ -33,30 +33,11 @@ public:
             m_filestream.seekg(position);
         }
     }
-    inline const std::size_t getPosition() const { return m_filestream.tellg(); }
+    inline const std::streampos getPosition() const { return m_filestream.tellg(); }
 
-    template <typename T>
-    inline constexpr T read()
+    inline void read_buffer(s8* buffer, std::streampos size)
     {
-        // UNSIGNED INTEGER TYPES
-        if constexpr (std::is_same<T, u32>::value) {
-            return readU32();
-        } else if constexpr (std::is_same<T, u16>::value) {
-            return readU16();
-        } else if constexpr (std::is_same<T, u8>::value) {
-            return readU8();
-        }
-
-        // SIGNED INTEGER TYPES
-        else if constexpr (std::is_same<T, s32>::value) {
-            return readS32();
-        } else if constexpr (std::is_same<T, s16>::value) {
-            return readS16();
-        } else if constexpr (std::is_same<T, s8>::value) {
-            return readS8();
-        }
-
-        return T();
+        m_filestream.read(buffer, size);
     }
 
     inline u8 readU8()
@@ -85,6 +66,15 @@ public:
             ? (byte0 | (byte1 << 8) | (byte2 << 16) | (byte3 << 24))
             : (byte3 | (byte2 << 8) | (byte1 << 16) | (byte0 << 24));
     }
+    inline u64 readU64()
+    {
+        u32 word0 = readU32();
+        u32 word1 = readU32();
+
+        return (m_endianness == Endianness::Little)
+            ? (((u64)word0) | ((u64)word1 << 32))
+            : (((u64)word1) | ((u64)word0 << 32));
+    }
 
     inline s8 readS8()
     {
@@ -112,9 +102,19 @@ public:
             ? (byte0 | (byte1 << 8) | (byte2 << 16) | (byte3 << 24))
             : (byte3 | (byte2 << 8) | (byte1 << 16) | (byte0 << 24));
     }
+    inline s64 readS64()
+    {
+        s32 word0 = readS32();
+        s32 word1 = readS32();
+
+        return (m_endianness == Endianness::Little)
+            ? (((s64)word0 << 32) | (word1))
+            : (((s64)word1 << 32) | (word0));
+    }
+
+    std::ifstream& m_filestream;
 
 private:
-    std::ifstream& m_filestream;
     std::streampos m_filesize;
     Endianness m_endianness;
 };
