@@ -2,6 +2,7 @@
 #include <util/fstream_reader.hpp>
 #include <util/misc.hpp>
 #include <util/vector_reader.hpp>
+#include <util/tokeniser.hpp>
 
 int main(int argc, char** argv)
 {
@@ -29,6 +30,12 @@ int main(int argc, char** argv)
         for (const std::string& foundStrs : anagramsOfHello) {
             std::cout << foundStrs << " is an anagram of hello" << std::endl;
         }
+    }
+
+    // CHECKING TOKENISER FUNCTIONS
+    util::tokeniser tokeniser("hi my name is mitty boy");
+    while (!tokeniser.isEnd()) {
+        std::cout << tokeniser.next() << ' ';
     }
 
     std::remove("out.txt");

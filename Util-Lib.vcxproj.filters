@@ -38,5 +38,8 @@
     <ClInclude Include="util\vector_reader.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="util\tokeniser.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

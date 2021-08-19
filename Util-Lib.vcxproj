@@ -155,6 +155,7 @@
     <ClInclude Include="types.hpp" />
     <ClInclude Include="util\fstream_reader.hpp" />
     <ClInclude Include="util\misc.hpp" />
+    <ClInclude Include="util\tokeniser.hpp" />
     <ClInclude Include="util\vector_reader.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
