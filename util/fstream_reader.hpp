@@ -112,6 +112,12 @@ public:
             : (((s64)word1 << 32) | (word0));
     }
 
+    inline f32 readF32()
+    {
+        u32 word = readU32();
+        return *reinterpret_cast<float*>(&word);
+    }
+
     std::ifstream& m_filestream;
 
 private:
