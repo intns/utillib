@@ -35,7 +35,7 @@ public:
     }
     inline const std::streampos getPosition() const { return m_filestream.tellg(); }
 
-    inline void read_buffer(s8* buffer, std::streampos size)
+    inline void read_buffer(char* buffer, std::streampos size)
     {
         m_filestream.read(buffer, size);
     }
@@ -43,7 +43,7 @@ public:
     inline u8 readU8()
     {
         u8 byte = 0;
-        m_filestream.read(reinterpret_cast<s8*>(&byte), 1);
+        m_filestream.read(reinterpret_cast<char*>(&byte), 1);
         return byte;
     }
     inline u16 readU16()
@@ -78,7 +78,7 @@ public:
 
     inline s8 readS8()
     {
-        s8 byte = 0;
+        char byte = 0;
         m_filestream.read(&byte, 1);
         return byte;
     }
